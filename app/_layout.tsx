@@ -18,6 +18,7 @@ export default function Layout(){
             <Tabs.Screen name="counter"  
                 options={{
                     title: "Counter",
+                    headerShown: false, //two headers were generated when we created the counter stack. this hides the outer one. 
                     tabBarIcon: ({ color, size }) => (
                         <AntDesign name="clockcircleo" size={size} color={color}/>
                     ),
