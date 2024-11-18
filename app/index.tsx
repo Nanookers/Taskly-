@@ -1,7 +1,7 @@
 import { Link } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
-import { StyleSheet, TextInput, View, Alert} from "react-native";
+import { StyleSheet, TextInput, Text, FlatList, View} from "react-native";
 import { ShoppingListItem } from "../components/ShopingListItem";
 import { theme } from "../theme";
 
@@ -9,14 +9,9 @@ type ShoppingListItemType = {
   id: string;
   name: string;
 }
-const initialList: ShoppingListItemType[] = [
-  { id: "1", name: "Coffee" },
-  { id: "2", name: "Tea" },
-  { id: "3", name: "Milk" },
-]
 
 export default function App() {
-  const [shoppingList, setShoppingList] = useState<ShoppingListItemType[]>(initialList)
+  const [shoppingList, setShoppingList] = useState<ShoppingListItemType[]>([])
   const [ value, setValue ] = useState("")
 
   const handleSubmit = () => {
@@ -31,8 +26,18 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container}>
-      <TextInput 
+    <FlatList //use FlatList, as opposed to scroll view, especially when mapping through data
+      data={shoppingList}
+      style={styles.container} 
+      contentContainerStyle={styles.contentContainer}
+      stickyHeaderIndices={[0]}
+      ListEmptyComponent={
+        <View style={styles.listEmpty}>
+          <Text>Your List Is Empty</Text>
+        </View>
+      }
+      ListHeaderComponent={
+        <TextInput 
         style={styles.textInput} 
         placeholder="E.g Coffee"
         value={value}
@@ -41,10 +46,11 @@ export default function App() {
         returnKeyType="done"
         onSubmitEditing={handleSubmit}
         /> 
-      {shoppingList.map((item) => (
-        <ShoppingListItem name={item.name} key={item.id}/>
-      ))}
-    </View>
+      } //this handles the mapping as we add new lines
+      renderItem={({ item }) => (
+         <ShoppingListItem name={item.name}/>
+      )}
+    />
   );
 }
 // This just creates an object of styles.
@@ -52,7 +58,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    paddingTop: 12
+    padding: 12
+  },
+  contentContainer: {
+    paddingTop: 24
   },
   textInput: {
     borderColor: theme.colorLightGrey,
@@ -61,6 +70,12 @@ const styles = StyleSheet.create({
     marginHorizontal:12,
     marginBottom: 12,
     fontSize: 18,
-    borderRadius: 50
+    borderRadius: 50,
+    backgroundColor: theme.colorWhite //This is what makes the input not see through
+  },
+  listEmpty:{
+    justifyContent:"center",
+    alignItems: "center",
+    marginVertical: 18
   }
 });
