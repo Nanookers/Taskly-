@@ -1,7 +1,8 @@
+import { Link } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, TouchableOpacity, Alert} from "react-native";
-import { ShoppingListItem } from "./components/ShopingListItem";
-import { theme } from "./theme";
+import { ShoppingListItem } from "../components/ShopingListItem";
+import { theme } from "../theme";
 
 export default function App() {
   return (
