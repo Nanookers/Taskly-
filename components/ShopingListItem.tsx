@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity, View, StyleSheet, Alert } from "react-native";
+import { Text, TouchableOpacity, View, StyleSheet, Alert, Pressable } from "react-native";
 import { theme } from "../theme";
 import AntDesign from "@expo/vector-icons/AntDesign"
 
@@ -6,16 +6,18 @@ type Props = {
     // If I want to make this optional, format like: name?:string
     name: string;
     isCompleted?: boolean;
+    onDelete: () => void; //mandatory function ()=> means "give me any function."
+    onToggleComplete: () => void;
 }
 
-export function ShoppingListItem({ name, isCompleted }: Props){
+export function ShoppingListItem({ name, isCompleted, onDelete, onToggleComplete }: Props){
     const handleDelete = () => {
         Alert.alert(`Are you sure you want to delete ${name}?`, 
         `${name} will be gone forever`,
         [
           {
             text: "Yes",
-            onPress: () => console.log("Deleting"),
+            onPress: () => onDelete(),
             style:"destructive"
           },
           {
@@ -29,14 +31,14 @@ export function ShoppingListItem({ name, isCompleted }: Props){
 
     return(
         //Turning this into an array allows conditional 
-        <View style={[styles.itemContainer, isCompleted ? styles.completedContainer : undefined]}>
+        <Pressable style={[styles.itemContainer, isCompleted ? styles.completedContainer : undefined]} onPress={onToggleComplete}>
         <Text style={[styles.itemText, isCompleted ? styles.completedText : undefined]}>{name}</Text>
         <TouchableOpacity onPress={()=>console.log("Pressed")} 
           activeOpacity={0.5} 
             onPress={handleDelete}>
             <AntDesign name="closecircle" size={24} color={isCompleted ? theme.colorGrey : theme.colorRed} />
         </TouchableOpacity>
-      </View>
+      </Pressable>
     )
 }
 

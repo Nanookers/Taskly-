@@ -8,6 +8,7 @@ import { theme } from "../theme";
 type ShoppingListItemType = {
   id: string;
   name: string;
+  completedAtTimestamp?: number;
 }
 
 export default function App() {
@@ -21,8 +22,15 @@ export default function App() {
         ...shoppingList,
       ];
       setShoppingList(newShoppingList);
+      console.log(newShoppingList)
       setValue("")
     }
+  }
+
+  const handleDelete = (id: string) => {
+    const newShoppingList = shoppingList.filter((item) => item.id !== id)
+    console.log(newShoppingList)
+    setShoppingList(newShoppingList)
   }
 
   return (
@@ -48,7 +56,9 @@ export default function App() {
         /> 
       } //this handles the mapping as we add new lines
       renderItem={({ item }) => (
-         <ShoppingListItem name={item.name}/>
+         <ShoppingListItem 
+         name={item.name} 
+         onDelete={ () => handleDelete(item.id)}/>
       )}
     />
   );
